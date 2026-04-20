@@ -1,0 +1,36 @@
+# Ambiente virtual Python
+.venv/
+venv/
+env/
+
+# Variáveis de ambiente (contém senhas e chaves)
+.env
+
+# Fotos e snapshots recebidos da câmera
+fotos/
+snapshots/
+
+# Cache Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+
+# Logs
+*.log
+
+# Editores
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Testes / arquivos temporários
+*.jpg
+*.jpeg
+!assets/
