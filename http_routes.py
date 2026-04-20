@@ -45,9 +45,10 @@ API_KEY = os.environ.get("API_KEY", "")
 
 @web.middleware
 async def auth_middleware(request: web.Request, handler):
-    # Uploads da câmera usam autenticação própria via session key.
+    # Health check e uploads da câmera dispensam API key.
     if (
-        request.path.startswith("/snapshot/")
+        request.path == "/health"
+        or request.path.startswith("/snapshot/")
         or request.path == "/upload"
     ):
         return await handler(request)
@@ -128,6 +129,12 @@ async def _store_snapshot_for_mac(
     )
     _log(f"snapshot stored mac={mac} seq={snap.seq} size={snap.size}B burst={burst_id}")
     return snap
+
+
+# ─── Health check (sem auth) ──────────────────────────────────────────────────
+
+async def health_handler(request: web.Request) -> web.Response:
+    return web.json_response({"ok": True, "devices": len(active_connections)})
 
 
 # ─── Endpoints gerais ─────────────────────────────────────────────────────────
@@ -401,6 +408,9 @@ def build_app() -> web.Application:
         middlewares=[auth_middleware],
         client_max_size=10 * 1024 * 1024,
     )
+
+    # Health (sem auth)
+    app.router.add_get("/health", health_handler)
 
     # Devices
     app.router.add_get("/devices", devices_handler)

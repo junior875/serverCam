@@ -1,15 +1,10 @@
 [build]
 builder = "nixpacks"
+buildCommand = "pip install -r requirements.txt"
 
 [deploy]
 startCommand = "python server.py"
-healthcheckPath = "/devices"
+healthcheckPath = "/health"
 healthcheckTimeout = 30
 restartPolicyType = "on_failure"
 restartPolicyMaxRetries = 5
-
-[[services]]
-name = "fluxcam"
-
-[services.tcp]
-port = 9000
